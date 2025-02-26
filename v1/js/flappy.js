@@ -67,7 +67,8 @@ function criarBarreiras(altura, largura, abertura, espaco, notificarPonto) {
 
       // quando a barreira sair da área do jogo
       if (par.getX() < -par.getLargura()) {
-        par.setX(par.getX() + espaco * this.pares.length);
+        const maxX = Math.max(...this.pares.map((p) => p.getX()));
+        par.setX(maxX + espaco);
         par.sortearAbertura();
       }
 
