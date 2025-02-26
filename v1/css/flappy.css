@@ -93,4 +93,5 @@ body {
   right: 10px;
   font-family: var(--font-score);
   font-size: 3rem;
+  z-index: 1000;
 }
