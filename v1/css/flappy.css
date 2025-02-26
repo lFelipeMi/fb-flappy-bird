@@ -38,6 +38,7 @@ body {
 [flappy] {
   position: relative;
   /*margin: 10px;*/
+  margin-bottom: 20px;
 
   height: 86vh;
   width: 96vw;

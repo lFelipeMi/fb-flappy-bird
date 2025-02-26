@@ -1,3 +1,11 @@
+let jogoPausado = false;
+
+window.addEventListener("resize", () => {
+  jogoPausado = true;
+  alert("A página deve ser recarregada após redimensionar a tela.");
+  location.reload();
+});
+
 function novoElemento(tagName, className) {
   const elem = document.createElement(tagName);
   elem.className = className;
@@ -62,6 +70,8 @@ function criarBarreiras(altura, largura, abertura, espaco, notificarPonto) {
 
   const deslocamento = 3;
   this.animar = () => {
+    if (jogoPausado) return;
+
     this.pares.forEach((par) => {
       par.setX(par.getX() - deslocamento);
 
