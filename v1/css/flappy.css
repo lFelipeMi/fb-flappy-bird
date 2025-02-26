@@ -95,3 +95,26 @@ body {
   font-size: 3rem;
   z-index: 1000;
 }
+
+.mensagem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+}
+
+.mensagem h2 {
+  font-size: 3rem;
+  font-family: var(--font-padrao);
+
+  margin: 0;
+}
+
+.mensagem p {
+  font-size: 3rem;
+  font-family: var(--font-score);
+
+  margin: 0;
+}

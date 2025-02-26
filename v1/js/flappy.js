@@ -142,19 +142,7 @@ function Progesso() {
 
   this.atualizarPontos(0);
 }
-/*
-const barreiras = new Barreiras(alturaEmPixels, larguraEmPixels, 200, 400);
-const passaro = new Passaro(alturaEmPixels);
-const areaDoJogo = document.querySelector("[flappy]");
 
-areaDoJogo.appendChild(passaro.elemento);
-areaDoJogo.appendChild(new Progesso().elemento);
-barreiras.pares.forEach((par) => areaDoJogo.appendChild(par.elemento));
-setInterval(() => {
-  barreiras.animar();
-  passaro.animarP();
-}, 20);
-*/
 function analizarColizao(elementoA, elementoB) {
   const a = elementoA.getBoundingClientRect();
   const b = elementoB.getBoundingClientRect();
@@ -182,28 +170,74 @@ function colidiu(passaro, barreiras) {
 
 function FlappyBird() {
   let pontos = 0;
+  let gamePaused = false;
+  let gameOver = false;
 
   const areaDoJogo = document.querySelector("[flappy]");
   const altura = areaDoJogo.clientHeight;
   const largura = areaDoJogo.clientWidth;
 
   const progresso = new Progesso();
-  const barreiras = new Barreiras(altura, largura, 200, 400, () =>
+  let barreiras = new Barreiras(altura, largura, 200, 400, () =>
     progresso.atualizarPontos(++pontos)
   );
-  const passaro = new Passaro(altura);
+  let passaro = new Passaro(altura);
 
   areaDoJogo.appendChild(progresso.elemento);
   areaDoJogo.appendChild(passaro.elemento);
   barreiras.pares.forEach((par) => areaDoJogo.appendChild(par.elemento));
 
+  function exibirMensagem(tipo) {
+    const mensagem = novoElemento("div", "mensagem");
+    mensagem.innerHTML = `<h2>${
+      tipo === "pause" ? "Jogo Pausado" : "Game Over"
+    }</h2><p>${pontos}</p>` /*<p>Pressione qualquer tecla para continuar</p>`*/;
+    areaDoJogo.appendChild(mensagem);
+  }
+
+  function removerMensagem() {
+    const mensagem = document.querySelector(".mensagem");
+    if (mensagem) mensagem.remove();
+  }
+
+  function pausarJogo() {
+    if (!gameOver) {
+      gamePaused = !gamePaused;
+      if (gamePaused) {
+        exibirMensagem("pause");
+      } else {
+        removerMensagem();
+      }
+    }
+  }
+
+  function finalizarJogo() {
+    gameOver = true;
+    exibirMensagem("gameover");
+  }
+
+  function reiniciarJogo() {
+    if (gameOver) location.reload();
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "p" || event.key === "P") {
+      pausarJogo();
+    } else if (gamePaused || gameOver) {
+      reiniciarJogo();
+    }
+  });
+
   this.start = () => {
     const temporizador = setInterval(() => {
-      barreiras.animar();
-      passaro.animarP();
+      if (!gamePaused && !gameOver) {
+        barreiras.animar();
+        passaro.animarP();
 
-      if (colidiu(passaro, barreiras)) {
-        clearInterval(temporizador);
+        if (colidiu(passaro, barreiras)) {
+          clearInterval(temporizador);
+          finalizarJogo();
+        }
       }
     }, 20);
   };
