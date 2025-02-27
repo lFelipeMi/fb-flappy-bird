@@ -6,6 +6,13 @@ window.addEventListener("resize", () => {
   location.reload();
 });
 
+if (window.innerWidth < 600) {
+  alert(
+    "Este jogo ainda não tem suporte para mobile, aguarde por futuras atualizações de compatibilidade."
+  );
+  location.reload();
+}
+
 function novoElemento(tagName, className) {
   const elem = document.createElement(tagName);
   elem.className = className;
@@ -170,7 +177,7 @@ function colidiu(passaro, barreiras) {
 
 function FlappyBird() {
   let pontos = 0;
-  let gamePaused = false;
+  let jogoPausado = false;
   let gameOver = false;
 
   const areaDoJogo = document.querySelector("[flappy]");
@@ -202,8 +209,8 @@ function FlappyBird() {
 
   function pausarJogo() {
     if (!gameOver) {
-      gamePaused = !gamePaused;
-      if (gamePaused) {
+      jogoPausado = !jogoPausado;
+      if (jogoPausado) {
         exibirMensagem("pause");
       } else {
         removerMensagem();
@@ -223,14 +230,14 @@ function FlappyBird() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "p" || event.key === "P") {
       pausarJogo();
-    } else if (gamePaused || gameOver) {
+    } else if (jogoPausado || gameOver) {
       reiniciarJogo();
     }
   });
 
   this.start = () => {
     const temporizador = setInterval(() => {
-      if (!gamePaused && !gameOver) {
+      if (!jogoPausado && !gameOver) {
         barreiras.animar();
         passaro.animarP();
 
